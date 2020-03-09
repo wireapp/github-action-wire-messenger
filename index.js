@@ -45,16 +45,27 @@ const startBot = async (bot, storeEngine) => {
 };
 
 (async () => {
+  const email = core.getInput('email') || WIRE_EMAIL;
+  const password = core.getInput('password') || WIRE_PASSWORD;
+  const conversation = core.getInput('conversation') || WIRE_CONVERSATION;
+  const text = core.getInput('text') || WIRE_TEXT;
+  console.info('Creating bot', email, conversation, text);
+  const bot = new Bot({email, password}, config);
+  const storeEngine = new MemoryEngine();
   try {
-    const email = core.getInput('email') || WIRE_EMAIL;
-    const password = core.getInput('password') || WIRE_PASSWORD;
-    const conversation = core.getInput('conversation') || WIRE_CONVERSATION;
-    const text = core.getInput('text') || WIRE_TEXT;
-    console.info('Creating bot', email, conversation, text);
-    const bot = new Bot({email, password}, config);
-    const storeEngine = new MemoryEngine();
     await storeEngine.init('wire-github-action-bot');
+  } catch (error) {
+    core.setFailed(error);
+    process.exit(1);
+  }
+  try {
     await startBot(bot, storeEngine);
+  } catch (error) {
+    core.setFailed(error);
+    process.exit(1);
+  }
+
+  try {
     await bot.sendText(conversation, text);
     process.exit(0);
   } catch (error) {
