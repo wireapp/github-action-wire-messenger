@@ -1,8 +1,8 @@
 name: Wire GitHub action bot
-description: Post messages using a Wire Bot
+description: Post messages using a Wire bot
 branding:
-  icon: bar-chart-2
-  color: purple
+  icon: message-circle
+  color: white
 inputs:
   email:
     description: 'Wire bot email'
