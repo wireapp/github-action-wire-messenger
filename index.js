@@ -56,16 +56,19 @@ const startBot = async (bot, storeEngine) => {
     await storeEngine.init('wire-github-action-bot');
   } catch (error) {
     console.error('init', error);
+    core.setFailed(error);
   }
   try {
     await startBot(bot, storeEngine);
   } catch (error) {
     console.error('startBot', error);
+    core.setFailed(error);
   }
 
   try {
     await bot.sendText(conversation, text);
   } catch (error) {
     console.error('sendText', error);
+    core.setFailed(error);
   }
 })().catch(error => core.setFailed(error));
