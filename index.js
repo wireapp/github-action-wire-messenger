@@ -53,12 +53,12 @@ const startBot = async (bot, storeEngine) => {
     console.info('Creating bot', email, conversation, text);
     const bot = new Bot({email, password}, config);
     const storeEngine = new MemoryEngine();
-    await storeEngine.init('wire-action-bot');
+    await storeEngine.init('wire-github-action-bot');
     await startBot(bot, storeEngine);
     await bot.sendText(conversation, text);
     process.exit(0);
   } catch (error) {
-    core.setFailed(error.name);
+    core.setFailed(error);
     process.exit(1);
   }
 })().catch(error => core.setFailed(error));
