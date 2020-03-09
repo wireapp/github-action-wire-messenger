@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "module": "ESNext",
+        "strict": true,
+        "target": "es5",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "declaration": true,
+        "downlevelIteration": true
+    }
+}

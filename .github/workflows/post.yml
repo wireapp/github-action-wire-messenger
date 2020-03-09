@@ -1,0 +1,15 @@
+name: Wire GitHub action bot
+on: push
+jobs:
+  post:
+    name: Wire GitHub action bot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Post a message
+        uses: ./
+        with:
+          email: ${{secrets.WIRE_BOT_EMAIL}}
+          password: ${{secrets.WIRE_BOT_PASSWORD}}
+          conversation: '6936f0a3-be49-4f81-b4a7-d734661beff2'
+          text: 'Hello, World!'
