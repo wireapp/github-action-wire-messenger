@@ -67,6 +67,7 @@ const startBot = async (bot, storeEngine) => {
 
   try {
     await bot.sendText(conversation, text);
+    process.exit(0)
   } catch (error) {
     console.error('sendText', error);
     core.setFailed(error);
