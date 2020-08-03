@@ -1,0 +1,51 @@
+{
+  "name": "uuidjs",
+  "version": "4.2.5",
+  "title": "UUID.js",
+  "description": "RFC-compliant UUID Generator for JavaScript",
+  "main": "src/uuid.js",
+  "types": "types/uuidjs/index.d.ts",
+  "bin": {
+    "uuidjs": "bin/cli.js"
+  },
+  "directories": {
+    "bin": "bin",
+    "test": "test"
+  },
+  "tonicExampleFilename": "example.js",
+  "scripts": {
+    "jsdoc": "rm -rf docs && jsdoc -R README.md -d docs src/uuid.js",
+    "prepare": "npm run test && npm run test-ts",
+    "test": "qunit test/nodejs.js",
+    "test-ts": "tsc --strict --noEmit types/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LiosK/UUID.js.git"
+  },
+  "keywords": [
+    "library",
+    "uuid",
+    "guid",
+    "rfc",
+    "4122",
+    "universally",
+    "globally",
+    "unique",
+    "identifier"
+  ],
+  "author": "LiosK <contact@mail.liosk.net>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/LiosK/UUID.js/issues"
+  },
+  "homepage": "https://github.com/LiosK/UUID.js",
+  "devDependencies": {
+    "jsdoc": "^3.6.3",
+    "qunit": "^2.9.3",
+    "typescript": "^3.8.3"
+  },
+  "browser": {
+    "crypto": false
+  }
+}

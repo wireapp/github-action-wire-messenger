@@ -2,6 +2,10 @@
   "dependencies": {
     "protobufjs": "6.8.8"
   },
+  "devDependencies": {
+    "@types/node": "~12",
+    "typescript": "latest"
+  },
   "description": "Protocol definition for generic messages.",
   "files": [
     "proto/messages.proto",
@@ -14,9 +18,10 @@
   "repository": "https://github.com/wireapp/generic-message-proto.git",
   "scripts": {
     "dist": "node web/compile.js",
-    "version": "yarn dist",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push origin && git push origin --tags && npm publish",
+    "preversion": "git checkout master && git pull && yarn && yarn test && yarn dist",
+    "test": "tsc --noEmit"
   },
   "types": "web/Protobuf.d.ts",
-  "version": "1.24.2"
+  "version": "1.25.4"
 }
