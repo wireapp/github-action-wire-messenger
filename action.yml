@@ -1,23 +1,23 @@
-name: Wire GitHub action bot
-description: Post messages using a Wire bot
+name: Wire Messenger
+description: 'Send messages to Wire conversations'
 branding:
   icon: message-circle
   color: white
 inputs:
   email:
-    description: 'Wire bot email'
+    description: 'Email of Wire user'
     required: true
     default: ''
   password:
-    description: 'Wire bot password'
+    description: 'Password of Wire user'
     required: true
     default: ''
   conversation:
-    description: 'The ID of the conversation'
+    description: 'Conversation UUID'
     required: true
     default: ''
   text:
-    description: 'Text you want to post'
+    description: 'Message you want to send'
     required: true
     default: 'Hello, world!'
 runs:
