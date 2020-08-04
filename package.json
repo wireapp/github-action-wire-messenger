@@ -1,18 +1,17 @@
 {
-  "name": "wire-github-action-bot",
-  "version": "1.0.0",
-  "description": "Wire GitHub action bot",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Panayiotis Lipiridis <lipiridis@gmail.com>",
   "dependencies": {
     "@actions/core": "1.2.4",
-    "@actions/github": "4.0.0",
     "@wireapp/bot-api": "7.10.24",
     "@wireapp/store-engine": "4.5.8",
     "@wireapp/store-engine-fs": "2.2.12",
     "dotenv": "8.2.0"
-  }
+  },
+  "description": "Wire Messenger for GitHub Actions",
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "name": "github-action-wire-messenger",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }

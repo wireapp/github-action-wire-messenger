@@ -1,20 +1,26 @@
+//@ts-check
 const core = require('@actions/core');
-const github = require('@actions/github');
 
 const {Bot} = require('@wireapp/bot-api');
 const {MemoryEngine} = require('@wireapp/store-engine');
+const {ClientType} = require('@wireapp/api-client/dist/client/');
 
 require('dotenv').config();
 
 const {WIRE_CONVERSATION, WIRE_EMAIL, WIRE_PASSWORD, WIRE_TEXT} = process.env;
 
+/** @type {import('@wireapp/bot-api').BotConfig} */
 const config = {
   backend: 'production',
-  clientType: 'temporary',
+  clientType: ClientType.TEMPORARY,
   conversations: [],
   owners: [],
 };
 
+/**
+ * @param {Bot} bot
+ * @param {import('@wireapp/store-engine').CRUDEngine} storeEngine
+ */
 const loginBot = async (bot, storeEngine) => {
   await bot.start(storeEngine);
   if (bot.account) {
@@ -35,6 +41,10 @@ const loginBot = async (bot, storeEngine) => {
   return bot;
 };
 
+/**
+ * @param {Bot} bot
+ * @param {import('@wireapp/store-engine').CRUDEngine} storeEngine
+ */
 const startBot = async (bot, storeEngine) => {
   try {
     return await loginBot(bot, storeEngine);
@@ -68,7 +78,7 @@ const startBot = async (bot, storeEngine) => {
   try {
     await bot.sendText(conversation, text);
     console.info('Message sent', text);
-    process.exit(0)
+    process.exit(0);
   } catch (error) {
     console.error('sendText', error);
     core.setFailed(error);
