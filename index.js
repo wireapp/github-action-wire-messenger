@@ -59,6 +59,9 @@ const startBot = async (bot, storeEngine) => {
   const password = core.getInput('password') || WIRE_PASSWORD;
   const conversation = core.getInput('conversation') || WIRE_CONVERSATION;
   const text = core.getInput('text') || WIRE_TEXT;
+  core.setSecret(password);
+  core.setSecret(email);
+  core.setSecret(conversation);
   console.info('Creating bot', email, conversation, text);
   const bot = new Bot({email, password}, config);
   const storeEngine = new MemoryEngine();
