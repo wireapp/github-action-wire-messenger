@@ -1,4 +1,5 @@
-name: Wire GitHub action bot
+# Test script to use the action from its own repository
+name: Wire GitHub Action Test
 on: push
 jobs:
   post:
@@ -6,10 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Post a message
+      - name: Send a text and a GIF
         uses: ./
         with:
           email: ${{secrets.WIRE_BOT_EMAIL}}
           password: ${{secrets.WIRE_BOT_PASSWORD}}
           conversation: '198c80a1-7a41-45e6-ac39-66732cf78490'
-          text: 'Hello, World!'
+          send_text: 'Hello, World!'
+          send_gif: 'in the oven'
