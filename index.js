@@ -1,6 +1,6 @@
 //@ts-check
+const axios = require('axios').default;
 const core = require('@actions/core');
-
 const {Bot} = require('@wireapp/bot-api');
 const {MemoryEngine} = require('@wireapp/store-engine');
 const {ClientType} = require('@wireapp/api-client/dist/client/');
@@ -54,23 +54,77 @@ const startBot = async (bot, storeEngine) => {
   }
 };
 
+const sendRandomGif = async (account, conversationId, query) => {
+  const giphySearchResult = await account.service.giphy.getRandomGif(query, 'g');
+  if (!giphySearchResult.data) {
+    logger.warn(`No gif found for search query "${query}" :(`);
+    return;
+  }
+
+  const {
+    id,
+    images: {
+      downsized_large: {url: imageURL, height: imageHeight, width: imageWidth},
+    },
+  } = giphySearchResult.data;
+  const {data: fileBuffer} = await axios.get(imageURL, {responseType: 'arraybuffer'});
+
+  const payload = account.service.conversation.messageBuilder
+    .createText({
+      conversationId,
+      text: `${query} • via giphy.com`,
+    })
+    .build();
+  await account.service.conversation.send({payloadBundle: payload});
+
+  const fileMetaDataPayload = account.service.conversation.messageBuilder.createFileMetadata({
+    conversationId,
+    metaData: {
+      length: fileBuffer.length,
+      name: `${id}.gif`,
+      type: 'image/gif',
+    },
+  });
+  await account.service.conversation.send({payloadBundle: fileMetaDataPayload});
+
+  try {
+    const filePayload = await account.service.conversation.messageBuilder.createImage({
+      conversationId,
+      image: {data: fileBuffer, height: Number(imageHeight), type: 'image/gif', width: Number(imageWidth)},
+      messageId: fileMetaDataPayload.id,
+    });
+    await account.service.conversation.send({payloadBundle: filePayload});
+  } catch (error) {
+    console.error(`Error while sending asset: "${error.stack}"`);
+    const fileAbortPayload = await account.service.conversation.messageBuilder.createFileAbort({
+      conversationId,
+      originalMessageId: fileMetaDataPayload.id,
+      reason: 0,
+    });
+    await account.service.conversation.send({payloadBundle: fileAbortPayload});
+  }
+};
+
 (async () => {
   const email = core.getInput('email') || WIRE_EMAIL;
   const password = core.getInput('password') || WIRE_PASSWORD;
   const conversation = core.getInput('conversation') || WIRE_CONVERSATION;
-  const text = core.getInput('text') || WIRE_TEXT;
-  core.setSecret(password);
+
+  // Mask sensitive data: https://github.com/actions/toolkit/tree/main/packages/core#setting-a-secret
   core.setSecret(email);
+  core.setSecret(password);
   core.setSecret(conversation);
-  console.info('Creating bot', email, conversation, text);
+
   const bot = new Bot({email, password}, config);
   const storeEngine = new MemoryEngine();
+
   try {
     await storeEngine.init('wire-github-action-bot');
   } catch (error) {
-    console.error('init', error);
+    console.error('storeEngine.init', error);
     core.setFailed(error);
   }
+
   try {
     await startBot(bot, storeEngine);
   } catch (error) {
@@ -78,12 +132,23 @@ const startBot = async (bot, storeEngine) => {
     core.setFailed(error);
   }
 
+  const text = core.getInput('send_text') || WIRE_TEXT;
+  const gifQuery = core.getInput('send_gif') || '';
+
   try {
-    await bot.sendText(conversation, text);
-    console.info('Message sent', text);
+    if (text) {
+      await bot.sendText(conversation, text);
+      console.info('Text sent', text);
+    }
+
+    if (gifQuery) {
+      await sendRandomGif(bot.account, conversation, gifQuery);
+      console.info('Gif sent', gifQuery);
+    }
+
     process.exit(0);
   } catch (error) {
-    console.error('sendText', error);
+    console.error('sending', error);
     core.setFailed(error);
   }
 })().catch(error => core.setFailed(error));
