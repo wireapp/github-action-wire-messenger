@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "@actions/core": "1.2.6",
-    "@wireapp/bot-api": "7.10.24",
-    "@wireapp/store-engine": "4.5.8",
-    "@wireapp/store-engine-fs": "2.2.12",
+    "@wireapp/bot-api": "7.17.17",
+    "@wireapp/store-engine": "4.9.7",
+    "@wireapp/store-engine-fs": "2.4.7",
     "dotenv": "8.2.0"
   },
   "description": "Wire Messenger for GitHub Actions",
