@@ -16,6 +16,9 @@ yarn add @wireapp/lru-cache
 
 ### Usage
 
-**Node.js**
+```ts
+import {LRUCache} from '@wireapp/lru-cache';
 
-- [LRUCacheSpec.js](./src/main/LRUCacheSpec.test.ts)
+const cache = new LRUCache();
+cache.set('Key', 'Value');
+```

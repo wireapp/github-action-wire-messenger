@@ -1,0 +1,63 @@
+/// <reference types="node" />
+import type { APIClient } from '@wireapp/api-client';
+import * as Events from '@wireapp/api-client/src/event';
+import type { Notification } from '@wireapp/api-client/src/notification/';
+import { CRUDEngine } from '@wireapp/store-engine';
+import { EventEmitter } from 'events';
+import { PayloadBundleSource, PayloadBundleType } from '../conversation';
+import * as OtrMessage from '../conversation/message/OtrMessage';
+import * as UserMessage from '../conversation/message/UserMessage';
+import { NotificationError } from '../CoreError';
+import type { CryptographyService } from '../cryptography';
+declare enum TOPIC {
+    NOTIFICATION_ERROR = "NotificationService.TOPIC.NOTIFICATION_ERROR"
+}
+export declare type NotificationHandler = (notification: Notification, source: PayloadBundleSource) => Promise<void>;
+export interface NotificationService {
+    on(event: PayloadBundleType.ASSET, listener: (payload: OtrMessage.FileAssetMessage) => void): this;
+    on(event: PayloadBundleType.BUTTON_ACTION, listener: (payload: OtrMessage.ButtonActionMessage) => void): this;
+    on(event: PayloadBundleType.ASSET_ABORT, listener: (payload: OtrMessage.FileAssetAbortMessage) => void): this;
+    on(event: PayloadBundleType.ASSET_IMAGE, listener: (payload: OtrMessage.ImageAssetMessage) => void): this;
+    on(event: PayloadBundleType.ASSET_META, listener: (payload: OtrMessage.FileAssetMetaDataMessage) => void): this;
+    on(event: PayloadBundleType.CALL, listener: (payload: OtrMessage.CallMessage) => void): this;
+    on(event: PayloadBundleType.CLIENT_ACTION, listener: (payload: OtrMessage.ResetSessionMessage) => void): this;
+    on(event: PayloadBundleType.CLIENT_ADD, listener: (payload: UserMessage.UserClientAddMessage) => void): this;
+    on(event: PayloadBundleType.CLIENT_REMOVE, listener: (payload: UserMessage.UserClientRemoveMessage) => void): this;
+    on(event: PayloadBundleType.CONFIRMATION, listener: (payload: OtrMessage.ConfirmationMessage) => void): this;
+    on(event: PayloadBundleType.CONNECTION_REQUEST, listener: (payload: UserMessage.UserConnectionMessage) => void): this;
+    on(event: PayloadBundleType.USER_UPDATE, listener: (payload: UserMessage.UserUpdateMessage) => void): this;
+    on(event: PayloadBundleType.CONVERSATION_CLEAR, listener: (payload: OtrMessage.ClearConversationMessage) => void): this;
+    on(event: PayloadBundleType.CONVERSATION_RENAME, listener: (payload: Events.ConversationRenameEvent) => void): this;
+    on(event: PayloadBundleType.LOCATION, listener: (payload: OtrMessage.LocationMessage) => void): this;
+    on(event: PayloadBundleType.MEMBER_JOIN, listener: (payload: Events.TeamMemberJoinEvent) => void): this;
+    on(event: PayloadBundleType.MESSAGE_DELETE, listener: (payload: OtrMessage.DeleteMessage) => void): this;
+    on(event: PayloadBundleType.MESSAGE_EDIT, listener: (payload: OtrMessage.EditedTextMessage) => void): this;
+    on(event: PayloadBundleType.MESSAGE_HIDE, listener: (payload: OtrMessage.HideMessage) => void): this;
+    on(event: PayloadBundleType.PING, listener: (payload: OtrMessage.PingMessage) => void): this;
+    on(event: PayloadBundleType.REACTION, listener: (payload: OtrMessage.ReactionMessage) => void): this;
+    on(event: PayloadBundleType.TEXT, listener: (payload: OtrMessage.TextMessage) => void): this;
+    on(event: PayloadBundleType.TIMER_UPDATE, listener: (payload: Events.ConversationMessageTimerUpdateEvent) => void): this;
+    on(event: PayloadBundleType.TYPING, listener: (payload: Events.ConversationTypingEvent) => void): this;
+    on(event: PayloadBundleType.UNKNOWN, listener: (payload: any) => void): this;
+    on(event: TOPIC.NOTIFICATION_ERROR, listener: (payload: NotificationError) => void): this;
+}
+export declare class NotificationService extends EventEmitter {
+    private readonly apiClient;
+    private readonly backend;
+    private readonly cryptographyService;
+    private readonly database;
+    private readonly logger;
+    static readonly TOPIC: typeof TOPIC;
+    constructor(apiClient: APIClient, cryptographyService: CryptographyService, storeEngine: CRUDEngine);
+    getAllNotifications(): Promise<Notification[]>;
+    /** Should only be called with a completely new client. */
+    initializeNotificationStream(): Promise<string>;
+    hasHistory(): Promise<boolean>;
+    getNotificationEventList(): Promise<Events.BackendEvent[]>;
+    setLastEventDate(eventDate: Date): Promise<Date>;
+    setLastNotificationId(lastNotification: Notification): Promise<string>;
+    handleNotificationStream(notificationHandler: NotificationHandler): Promise<void>;
+    readonly handleNotification: NotificationHandler;
+    private handleEvent;
+}
+export {};

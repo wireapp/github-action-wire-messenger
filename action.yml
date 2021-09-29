@@ -16,10 +16,14 @@ inputs:
     description: 'Conversation UUID'
     required: true
     default: ''
-  text:
-    description: 'Message you want to send'
-    required: true
-    default: 'Hello, world!'
+  send_gif:
+    description: 'Search query for a GIF'
+    required: false
+    default: ''
+  send_text:
+    description: 'Text message you want to send'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'index.js'
