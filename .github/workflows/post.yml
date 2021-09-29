@@ -14,3 +14,4 @@ jobs:
           password: ${{secrets.WIRE_BOT_PASSWORD}}
           conversation: '198c80a1-7a41-45e6-ac39-66732cf78490'
           send_text: 'Hello, World!'
+          send_gif: 'in the oven'
