@@ -19,11 +19,11 @@ inputs:
   send_gif:
     description: 'Search query for a GIF'
     required: false
-    default: 'meme'
+    default: ''
   send_text:
     description: 'Text message you want to send'
     required: false
-    default: 'Hello, world!'
+    default: ''
 runs:
   using: 'node12'
   main: 'index.js'
