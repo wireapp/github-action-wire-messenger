@@ -3,7 +3,7 @@ const axios = require('axios').default;
 const core = require('@actions/core');
 const {Bot} = require('@wireapp/bot-api');
 const {MemoryEngine} = require('@wireapp/store-engine');
-const {ClientType} = require('@wireapp/api-client/dist/client/');
+const {ClientType} = require('@wireapp/api-client/src/client/');
 
 require('dotenv').config();
 
@@ -145,10 +145,10 @@ const sendRandomGif = async (account, conversationId, query) => {
       await sendRandomGif(bot.account, conversation, gifQuery);
       console.info('Gif sent', gifQuery);
     }
-
-    process.exit(0);
   } catch (error) {
     console.error('sending', error);
     core.setFailed(error);
+  } finally {
+    process.exit(0);
   }
 })().catch(error => core.setFailed(error));
