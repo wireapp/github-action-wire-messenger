@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@actions/core": "1.2.7",
+    "@actions/core": "1.9.1",
     "@wireapp/bot-api": "7.17.18",
     "@wireapp/store-engine": "4.9.7",
     "@wireapp/store-engine-fs": "2.4.7",
